@@ -16,7 +16,7 @@ module.exports = function(controller) {
 
       bot.reply(message,{
         text: 'This message specified a 5000ms typing delay',
-        typingDelay: 5000,
+        typingDelay: 1000,
       });
 
     });
