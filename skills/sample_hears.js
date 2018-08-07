@@ -15,12 +15,9 @@ module.exports = function(controller) {
     }, function() {
 
       bot.reply(message,{
-        text: 'This message specified a 5000ms typing delay',
+        text: 'This message specified a 1000ms typing delay',
         typingDelay: 1000,
       });
-
     });
-
   });
-
-}
+};

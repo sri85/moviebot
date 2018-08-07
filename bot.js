@@ -24,8 +24,8 @@ var debug = require('debug')('botkit:main');
 var rp = require('request-promise');
 
 var bot_options = {
-  studio_token: process.env.studio_token,
-  studio_command_uri: process.env.studio_command_uri,
+  // studio_token: process.env.studio_token,
+  // studio_command_uri: process.env.studio_command_uri,
   studio_stats_uri: process.env.studio_command_uri,
   replyWithTyping: true,
 };
@@ -93,7 +93,7 @@ if (process.env.studio_token) {
         // set variables here that are needed for EVERY script
         // use controller.studio.before('script') to set variables specific to a script
         convo.setVar('current_time', new Date());
-        convo.setVar('bot', controller.studio_identity);
+        // convo.setVar('bot', controller.studio_identity);
       }
     }).catch(function (err) {
       bot.reply(message, 'I experienced an error with a request to Botkit Studio: ' + err);
@@ -101,7 +101,7 @@ if (process.env.studio_token) {
     });
   });
   controller.hears(['hi','hello','yo'],['message_received'],function(bot,message){
-    bot.reply(message,message.text);
+    bot.reply(message,message.text+'how can i help?');
   });
   controller.hears('movie', 'message_received', function (bot, message) {
     const movieName = message.text.match('(?<=movie).*$')[0].trim();
