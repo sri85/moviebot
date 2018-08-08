@@ -21,6 +21,7 @@ env(__dirname + '/.env');
 
 var Botkit = require('botkit');
 var Message = require('./commons/constructMessage.js');
+var Greetings = require('./commons/greetings.js');
 var debug = require('debug')('botkit:main');
 var rp = require('request-promise');
 
@@ -101,7 +102,7 @@ if (process.env.studio_token) {
       debug('Botkit Studio: ', err);
     });
   });
-  controller.hears(['hi','hello','yo'],['message_received'],function(bot,message){
+  controller.hears(Greetings,['message_received'],function(bot,message){
     bot.reply(message,message.text+' how can i help?');
   });
   controller.hears('movie', 'message_received', function (bot, message) {
