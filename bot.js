@@ -20,6 +20,7 @@ env(__dirname + '/.env');
 
 
 var Botkit = require('botkit');
+var Message = require('./commons/constructMessage.js');
 var debug = require('debug')('botkit:main');
 var rp = require('request-promise');
 
@@ -101,19 +102,14 @@ if (process.env.studio_token) {
     });
   });
   controller.hears(['hi','hello','yo'],['message_received'],function(bot,message){
-    bot.reply(message,message.text+'how can i help?');
+    bot.reply(message,message.text+' how can i help?');
   });
   controller.hears('movie', 'message_received', function (bot, message) {
     const movieName = message.text.match('(?<=movie).*$')[0].trim();
     console.log(movieName);
     return rp('http://127.0.0.1:8000/api/movieDetails/' + movieName).then((msg) => {
       const jsonResponse = JSON.parse(msg);
-      console.log(jsonResponse);
-      const imdbRating = (jsonResponse["imdb"]["rating"]);
-      const rottenTomatoesRating = (jsonResponse["rottenTomatoes"]["rating"]);
-      const rottenTomatoesLikes = jsonResponse["rottenTomatoes"]["likes"];
-      return bot.reply(message, `The movie ${movieName} has rating of ${imdbRating} on IMDB and has rating of
-       ${rottenTomatoesRating} on RottenTomatoes and ${rottenTomatoesLikes} like it on RottenTomatoes `);
+      return bot.reply(message, `The movie ${movieName} ${Message.createMessage(jsonResponse)}`);
     });
   });
 } else {
