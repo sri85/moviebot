@@ -6,6 +6,11 @@ module.exports = function(controller) {
     bot.reply(message,'I heard a test');
 
   });
+  controller.hears('ping','message_received', function(bot, message) {
+
+    bot.reply(message,'pong');
+
+  });
 
   controller.hears('typing','message_received', function(bot, message) {
 

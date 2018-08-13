@@ -21,7 +21,8 @@ env(__dirname + '/.env');
 
 var Botkit = require('botkit');
 var Message = require('./commons/constructMessage.js');
-var Greetings = require('./commons/greetings.js');
+var greetingKeywords = require('./commons/greetings.js');
+var keywords = require('./commons/keywords.js');
 var debug = require('debug')('botkit:main');
 var rp = require('request-promise');
 
@@ -102,16 +103,45 @@ if (process.env.studio_token) {
       debug('Botkit Studio: ', err);
     });
   });
-  controller.hears(Greetings,['message_received'],function(bot,message){
-    bot.reply(message,message.text+' how can i help?');
+  controller.hears(greetingKeywords,['message_received'],function(bot,message){
+    bot.reply(message,message.text+' I am moviebot ,how can i help today? Type <b>help</b> to explore my skills');
   });
-  controller.hears('movie', 'message_received', function (bot, message) {
-    const movieName = message.text.match('(?<=movie).*$')[0].trim();
-    console.log(movieName);
+  controller.hears(keywords, ['message_received'], function (bot, message) {
+    const movieName = message.text.match('(?<=info|movie|rating).*$')[0].trim();
     return rp('http://127.0.0.1:8000/api/movieDetails/' + movieName).then((msg) => {
-      const jsonResponse = JSON.parse(msg);
-      return bot.reply(message, `The movie ${movieName} ${Message.createMessage(jsonResponse)}`);
+        const jsonResponse = JSON.parse(msg);
+        return bot.reply(message, `${Message.createMessage(jsonResponse)}`);
+
+    }).catch(() => {
+     bot.reply(message,'Well this is embarassing, we are summoming the software gods');
     });
+  });
+
+  controller.hears(['help','onboard me'], ['message_received'], function(bot,message) {
+
+
+    // start a conversation to handle this response.
+    bot.startConversation(message,function(err,convo) {
+      convo.sayFirst(`Hello, i am moviebot &#128247;`);
+      convo.say({
+        text: 'I am ready to take your movie queries,Lets try some sample queries to get you warmed up',
+        quick_replies: [
+          {
+            title: 'tell me about the movie Dilwale',
+            payload: 'movie dilwale',
+          },
+          {
+            title: 'give me info about Shawshank Redemption',
+            payload: 'info Shawshank Redemption',
+          },
+          {
+            title: 'what is the rating Shutter Island',
+            payload: 'rating Shutter Island',
+          }
+        ]
+      });
+    });
+
   });
 } else {
 

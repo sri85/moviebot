@@ -22,13 +22,14 @@ class MessageConstructor {
       https://www.imdb.com/find?ref_=nv_sr_fn&q=${responseObj["title"]}&s=all`;
     }
     else {
-      return `${responseObj["rating"]} on IMDB`
+      return `<b> Rating:</b>${responseObj["rating"]} \n\n\n <b> Cast:</b> ${responseObj["actors"]}  \n\n\n 
+<b>Plot:</b>${responseObj["summary"]}\n\n \n`
     }
 
   }
 
   createMessage(response) {
-    return `${this.createMessageForIMDB(response["imdb"])} and ${this.createMessageForRottenTomatoes(response["rottenTomatoes"])}`
+    return `${this.createMessageForIMDB(response["imdb"])}`
   }
 
 
